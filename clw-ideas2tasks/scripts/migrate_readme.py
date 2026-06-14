@@ -33,8 +33,7 @@ except EnvironmentError as e:
     sys.exit(1)
 
 # GitHub Tasks repo URL template
-GITHUB_TASKS_BASE = "https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main"
-
+GITHUB_TASKS_BASE = "https://github.com/gentoobreaking/ai-tasks/blob/main"
 
 def make_task_link(project_name, task_stem, display=None):
     """Generate a clickable Markdown link for a task.
@@ -254,13 +253,13 @@ def build_readme_standard(project_name, tasks):
 
 ## 更新規範
 
-每次狀態變更時，**同時更新** T\*.md 與本檔案：
+每次狀態變更時，**同時更新** T*.md 與本檔案：
 
-**pending → in-progress**：T\*.md 改 `status: in-progress`，README 改 `⬜ pending` → `🔄 in-progress`
+**pending → in-progress**：T*.md 改 `status: in-progress`，README 改 `⬜ pending` → `🔄 in-progress`
 
-**in-progress → done**：T\*.md 改 `status: done`，README 改 `🔄 in-progress` → `✅ done`
+**in-progress → done**：T*.md 改 `status: done`，README 改 `🔄 in-progress` → `✅ done`
 
-- 更新 T\*.md 時一併更新 `updated` 欄位
+- 更新 T*.md 時一併更新 `updated` 欄位
 - 完成後同步 GitHub Issue 狀態（`--sync-state`）
 """
 

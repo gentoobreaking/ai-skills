@@ -7,6 +7,7 @@
 .env.*
 
 # 暫存檔
+__pycache__
 *.tmp
 *.log
 /tmp/

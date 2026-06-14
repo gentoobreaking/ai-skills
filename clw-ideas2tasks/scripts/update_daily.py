@@ -63,7 +63,8 @@ for project_dir in sorted(TASKS_DIR.iterdir()):
         
         task_id = task_file.stem
         project = project_dir.name
-        task_url = f"https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/{project}/tasks/{task_file.name}"
+        task_url = f"https://github.com/gentoobreaking/ai-tasks/blob/main/{project}/tasks/{task_file.name}"
+
         task_link = f"[{task_id}]({task_url})"
 
         if created == str(TODAY):
@@ -139,9 +140,9 @@ md = f"""# 📅 Daily Dashboard - {TODAY}
 
 ## 🔗 快速連結
 
-- [完整專案視圖 → PROJECTS.md](https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/PROJECTS.md)
-- [每日儀表板 → DAILY.md](https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/DAILY.md)
-- [Tasks 根目錄](https://github.com/openclawchen8-lgtm/openclaw-tasks/tree/main)
+- [完整專案視圖 → PROJECTS.md](https://github.com/gentoobreaking/ai-tasks/blob/main/PROJECTS.md)
+- [每日儀表板 → DAILY.md](https://github.com/gentoobreaking/ai-tasks/blob/main/DAILY.md)
+- [Tasks 根目錄](https://github.com/gentoobreaking/ai-tasks/tree/main)
 - 腳本: `scripts/update_projects.py` · `scripts/update_daily.py`
 
 ---

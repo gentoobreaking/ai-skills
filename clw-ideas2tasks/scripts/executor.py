@@ -38,8 +38,11 @@ from classify import classify_idea
 TEMPLATE_PATH = Path(__file__).parent.parent / "templates" / "task-template.md"
 
 # GitHub 設定
-GH_OWNER = "openclawchen8-lgtm"
-GH_REPO  = "openclaw-tasks"
+GH_OWNER = os.environ.get("IDEAS2TASKS_GH_OWNER")
+GH_REPO  = os.environ.get("IDEAS2TASKS_GH_REPO")
+if not GH_OWNER or not GH_REPO:
+    print("❌ 請設定環境變數 IDEAS2TASKS_GH_OWNER 和 IDEAS2TASKS_GH_REPO", file=sys.stderr)
+    sys.exit(1)
 GH_PROJECT_ID = "PVT_kwHOD-tSg84BUX2a"
 GH_PROJECT_NUMBER = 1
 

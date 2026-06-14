@@ -5,15 +5,14 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
 import stats
+import state_sync
 
-TASKS_DIR = Path("/Users/claw/Tasks")
+TASKS_DIR = state_sync.TASKS_DIR
 OUTPUT_FILE = TASKS_DIR / "PROJECTS.md"
 NOW = subprocess.run(["date", "+%Y-%m-%d %H:%M"], capture_output=True, text=True).stdout.strip()
 
 # 生成效能統計
 stats_output = stats.generate_stats_report()
-
-import state_sync
 
 SKIP_DIRS = {"_inbox", "_verification", "_done"}
 
@@ -95,7 +94,7 @@ for project_dir in sorted(TASKS_DIR.iterdir()):
         updated = fm.get("updated", "")
         title = fm.get("title", "") or task_file.stem
 
-        task_url = f"https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/{project_dir.name}/tasks/{task_file.name}"
+        task_url = f"https://github.com/gentoobreaking/ai-tasks/blob/main/{project_dir.name}/tasks/{task_file.name}"
         task_link = f"[{task_file.stem}]({task_url})"
 
         if status == "done": p_done += 1
@@ -147,7 +146,7 @@ for project_dir in sorted(TASKS_DIR.iterdir()):
 
     updated_display = last_updated or "—"
     project_name = project_dir.name
-    project_url = f"https://github.com/openclawchen8-lgtm/openclaw-tasks/tree/main/{project_name}"
+    project_url = f"https://github.com/gentoobreaking/ai-tasks/tree/main/{project_name}"
     project_link = f"[{project_name}]({project_url})"
     row = f"| {emoji} | {project_link} | {p_total} | {p_done} | {p_pending} | {p_inprogress} | {p_skip} | {bar} | {updated_display} |"
     project_rows.append((row, pending_high))
@@ -206,9 +205,9 @@ md += f"""
 
 ## 🔗 快速連結
 
-- [任務看板](https://github.com/users/openclawchen8-lgtm/projects/1/views/1?groupedBy%5BcolumnId%5D=Status)
-- [每日儀表板 → DAILY.md](https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/DAILY.md)
-- [Tasks 根目錄](https://github.com/openclawchen8-lgtm/openclaw-tasks/tree/main)
+- [任務看板](https://github.com/users/gentoobreaking/projects/1/views/1?groupedBy%5BcolumnId%5D=Status)
+- [每日儀表板 → DAILY.md](https://github.com/gentoobreaking/ai-tasks/blob/main/DAILY.md)
+- [Tasks 根目錄](https://github.com/gentoobreaking/ai-tasks/tree/main)
 - 腳本: `scripts/update_projects.py` · `scripts/update_daily.py`
 
 ---

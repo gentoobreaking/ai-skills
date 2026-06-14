@@ -45,7 +45,7 @@ python3 executor.py --sync-github
 
 ```bash
 # Agent 完成後自動呼叫
-python3 task_completion_hook.py /Users/claw/Tasks/<project>/tasks/T001.md
+python3 task_completion_hook.py $HOME/tasks/<project>/tasks/T001.md
 
 # 效果：
 # 1. 更新 T001.md Status: done
@@ -62,7 +62,7 @@ python3 sync_status.py --dry-run
 python3 sync_status.py --fix-history
 
 # 掃描專案狀態
-python3 task_status.py /Users/claw/Tasks/<project-name>
+python3 task_status.py $HOME/tasks/<project-name>
 ```
 
 ---
@@ -129,10 +129,10 @@ python3 sync_status.py --fix-history
 **解決：**
 ```bash
 # 檢查所有 Status 格式
-grep -r "^Status:" /Users/claw/Tasks/*/tasks/T*.md | cut -d: -f3 | sort | uniq -c
+grep -r "^Status:" $HOME/tasks/*/tasks/T*.md | cut -d: -f3 | sort | uniq -c
 
 # 使用 task_status.py 統一讀取（自動正規化）
-python3 task_status.py /Users/claw/Tasks/<project>
+python3 task_status.py $HOME/Tasks/<project>
 ```
 
 ### 問題：找不到 idea 檔案
@@ -142,10 +142,10 @@ python3 task_status.py /Users/claw/Tasks/<project>
 **解決：**
 ```bash
 # 檢查專案名稱
-ls /Users/claw/Tasks/
+ls $HOME/tasks/
 
 # 檢查 idea 檔案
-ls /Users/claw/Ideas/*.txt
+ls $HOME/ideas/*.txt
 
 # 確認命名規則：
 # - 專案: working-issue
