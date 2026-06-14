@@ -1,8 +1,8 @@
-# openclaw-skills
+# ai-skills
 
-> 豪的 OpenClaw Skills 備份倉庫
+> 豪的 AI Skills 備份倉庫
 
-[![OpenClaw](https://img.shields.io/badge/OpenClaw-Skills-blue)](https://github.com/openclawchen8-lgtm/openclaw-skills)
+[![OpenClaw](https://img.shields.io/badge/AI-Skills-blue)](https://github.com/gentoobreaking/ai-skills)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 <!-- TOC -->
@@ -14,7 +14,7 @@
 ## 目錄結構 | Directory Structure
 
 ```
-openclaw-skills/
+ai-skills/
 ├── agent-browser-clawdbot-local  # 第三方：Headless browser automation CLI optimize
 ├── clw-cnyes-stock               # 📰 原創：鉅亨網台股新聞自動抓取，支援增量比對與 Telegram 通知。
 ├── clw-github                    # 原創：Interact with GitHub using the `gh` CLI.
@@ -95,4 +95,4 @@ openclaw skills install <skill-name>
 
 ---
 
-*最後更新：2026-05-30*
+*最後更新：2026-06-15*

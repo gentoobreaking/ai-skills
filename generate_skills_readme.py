@@ -6,7 +6,7 @@ from datetime import datetime
 
 SKILLS_DIR = Path.home() / "skills"
 OUTPUT_FILE = SKILLS_DIR / "README.md"
-REPO_URL = "https://github.com/openclawchen8-lgtm/openclaw-skills"
+REPO_URL = "https://github.com/gentoobreaking/ai-skills"
 
 ORIGINAL_EXTRA = {"scrum-task-tracker", "github-issues", "github-projects", "prompt-injection-filter"}
 
@@ -46,7 +46,7 @@ def scan_skills(sd):
 def build_tree(skills):
     ss = sorted(skills, key=lambda x: x["dir"].lower())
     max_w = max(len("├── " + s["dir"]) for s in ss)
-    lines = ["```", "openclaw-skills/"]
+    lines = ["```", "ai-skills/"]
     for s in ss:
         prefix = ("├── " + s["dir"])
         em = (s["emoji"] + " ") if s["emoji"] else ""
@@ -63,8 +63,8 @@ def generate_markdown(skills):
     def row(s):
         em = (s["emoji"] + " ") if s["emoji"] else ""
         return "| " + em + "`" + s["name"] + "` | " + s["name"].replace("-", " ").title() + " | " + s["desc"][:80] + " |"
-    parts = ["# openclaw-skills", "", "> 豪的 OpenClaw Skills 備份倉庫", ""]
-    parts += ["[![OpenClaw](https://img.shields.io/badge/OpenClaw-Skills-blue)](" + REPO_URL + ")",
+    parts = ["# ai-skills", "", "> 豪的 AI Skills 備份倉庫", ""]
+    parts += ["[![OpenClaw](https://img.shields.io/badge/AI-Skills-blue)](" + REPO_URL + ")",
              "[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)", ""]
     parts += ["<!-- TOC -->", "- [原創技能](#原創技能--original-skills)"]
     if third: parts[-1] += "\n- [第三方技能](#第三方技能--third-party-skills)"
@@ -86,7 +86,7 @@ def main():
     try:
         import yaml
     except ImportError:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyyaml", "-q"])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyyaml", "-q", "--break-system-packages"])
         import yaml
     skills = scan_skills(SKILLS_DIR)
     print("[掃描] 找到", len(skills), "個 skill")
