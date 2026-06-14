@@ -1,0 +1,36 @@
+{
+  "name": "clw-twse-monitor",
+  "version": "1.0.0",
+  "scene": "台股即時監控與推播通知",
+  "category": "金融監控",
+  "subtitle": "透過臺灣證券交易所 OpenAPI 監控個股行情、董監事持股、月營收、公司治理等，主動推播至 Telegram（含 Apple Watch）",
+  "target_user": "台股投資人、ETF 持有人、長期追蹤特定股票的用戶",
+  "core_need": "自動化監控關注股票的行情、訊息、治理風險，有異常才推播，不用自己盯盤",
+  "trigger_words": [
+    "台股監控",
+    "股價通知",
+    "TWSE",
+    "證交所",
+    "漲停通知",
+    "跌停通知",
+    "董監事持股",
+    "月營收",
+    "注意股票",
+    "處置股票",
+    "ESG監控",
+    "大盤指數",
+    "除權除息",
+    "殖利率",
+    "持股成本",
+    "未實現損益"
+  ],
+  "output_format": "Telegram 推播通知（分級：🔴緊急/🟡警告/🔵參考）+ SQLite 本地快取",
+  "priority": "P1",
+  "tools": [
+    "execute_command"
+  ],
+  "dependencies": [],
+  "real_objects": "Python 腳本（twse_monitor.py）、SQLite DB、JSON 設定檔",
+  "deliverables": "Telegram 通知訊息、DB 查詢結果（--show-db）、設定檔查詢（--show-config）",
+  "need_external_search": "否"
+}

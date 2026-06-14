@@ -1,0 +1,27 @@
+{
+  "name": "workflow-automator",
+  "version": "3.0.0",
+  "scene": "重复操作一键自动化",
+  "category": "开发提效",
+  "subtitle": "重复操作太浪费时间？用自然语言构建自动化工作流",
+  "target_user": "运营人员、办公自动化需求者、技术人员",
+  "core_need": "将重复操作自动化，节省时间",
+  "trigger_words": [
+    "自动化",
+    "工作流",
+    "重复操作"
+  ],
+  "output_format": "脚本文件 + 工作流配置 + 定时任务确认",
+  "priority": "P2",
+  "tools": [
+    "write_to_file",
+    "execute_command",
+    "automation_update"
+  ],
+  "dependencies": [
+    "workflow-builder"
+  ],
+  "real_objects": "脚本文件（write_to_file）、定时任务（automation_update）",
+  "deliverables": "自动化脚本（Python/Shell）、工作流配置文件（YAML）",
+  "need_external_search": "否"
+}

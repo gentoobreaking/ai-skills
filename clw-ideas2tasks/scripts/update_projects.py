@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+"""update_projects.py - 生成 PROJECTS.md 儀表板"""
+import os, re, subprocess
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+import stats
+
+TASKS_DIR = Path("/Users/claw/Tasks")
+OUTPUT_FILE = TASKS_DIR / "PROJECTS.md"
+NOW = subprocess.run(["date", "+%Y-%m-%d %H:%M"], capture_output=True, text=True).stdout.strip()
+
+# 生成效能統計
+stats_output = stats.generate_stats_report()
+
+import state_sync
+
+SKIP_DIRS = {"_inbox", "_verification", "_done"}
+
+def read_frontmatter(path):
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return {}
+    m = re.match(r'^---\n(.*?)\n---', text, re.DOTALL)
+    if not m:
+        return {}
+    fm = {}
+    for line in m.group(1).splitlines():
+        line = line.strip()
+        if ':' in line:
+            k, v = line.split(':', 1)
+            # Normalize key: remove markdown markers like '- **' and ':', then lowercase
+            key = k.replace('*', '').replace('-', '').strip().lower()
+            fm[key] = v.strip().strip('"').strip("'")
+    return fm
+
+def normalize_status(s):
+    s = (s or "").split("#")[0].strip().lower()
+    if s in ("done", "✅"): return "done"
+    if s in ("in-progress", "in_progress", "🔄"): return "in-progress"
+    if s in ("skip", "skipped", "⏭️"): return "skip"
+    if s in ("re-check", "re_check"): return "in-progress"
+    return "pending"
+
+task_status_map = {}
+
+
+def build_task_status_map():
+    global task_status_map
+    task_status_map = {}
+    for project_dir in sorted(TASKS_DIR.iterdir()):
+        if not project_dir.is_dir() or project_dir.name in SKIP_DIRS:
+            continue
+        tasks_dir = project_dir / "tasks"
+        if not tasks_dir.is_dir():
+            continue
+        for task_file in sorted(tasks_dir.glob("T*.md")):
+            task_id = task_file.stem
+            task_status_map[task_id] = state_sync.read_task_status(task_file)
+
+
+def is_blocked(blocked_by_list):
+    for tid in blocked_by_list:
+        if tid in task_status_map and task_status_map[tid] != "done":
+            return tid
+    return ""
+
+
+total_projects = total_tasks = total_done = total_pending = total_inprogress = total_skip = 0
+project_rows = []
+all_high_pending = []
+all_pending = []
+all_inprogress = []
+all_skip = []
+
+build_task_status_map()
+
+for project_dir in sorted(TASKS_DIR.iterdir()):
+    if not project_dir.is_dir() or project_dir.name in SKIP_DIRS:
+        continue
+    tasks_dir = project_dir / "tasks"
+    if not tasks_dir.is_dir():
+        continue
+
+    p_done = p_pending = p_inprogress = p_skip = p_total = 0
+    last_updated = ""
+    pending_high = []
+
+    for task_file in sorted(tasks_dir.glob("T*.md")):
+        p_total += 1
+        fm = read_frontmatter(task_file)
+        status = normalize_status(fm.get("status", ""))
+        priority = fm.get("priority", "").lower()
+        updated = fm.get("updated", "")
+        title = fm.get("title", "") or task_file.stem
+
+        task_url = f"https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/{project_dir.name}/tasks/{task_file.name}"
+        task_link = f"[{task_file.stem}]({task_url})"
+
+        if status == "done": p_done += 1
+        elif status == "pending":
+            p_pending += 1
+            all_pending.append((project_dir.name, task_link, title))
+        elif status == "in-progress":
+            p_inprogress += 1
+            all_inprogress.append((project_dir.name, task_link, title))
+        elif status == "skip":
+            p_skip += 1
+            all_skip.append((project_dir.name, task_link, title))
+
+        if updated and (not last_updated or updated > last_updated):
+            last_updated = updated
+
+        if priority == "high" and status in ("pending", "in-progress"):
+            blocked_by = state_sync.read_task_blocked_by(task_file)
+            blocker = is_blocked(blocked_by)
+            block_note = f" ⏳ 被 {blocker} 阻擋" if blocker else ""
+            pending_high.append(f"**{task_link}**: {title}{block_note}")
+            all_high_pending.append((project_dir.name, task_link, title + block_note))
+
+    if p_total == 0:
+        continue
+
+    total_projects += 1
+    total_tasks += p_total
+    total_done += p_done
+    total_pending += p_pending
+    total_inprogress += p_inprogress
+    total_skip += p_skip
+
+    # Progress excludes skipped tasks from the denominator
+    p_active = p_total - p_skip
+    pct = p_done * 100 // p_active if p_active > 0 else (100 if p_total > 0 else 0)
+    bar = "█" * (pct // 5) + "░" * (20 - pct // 5) + f" {pct}%"
+
+    if p_pending == 0 and p_inprogress == 0 and p_total > 0:
+        emoji = "✅" if p_done > 0 else "⏭️"
+    elif p_inprogress > 0:
+        emoji = "🔄"
+    elif p_pending > 0:
+        emoji = "⬜"
+    elif p_skip > 0:
+        emoji = "⏭️"
+    else:
+        emoji = "⚪"
+
+    updated_display = last_updated or "—"
+    project_name = project_dir.name
+    project_url = f"https://github.com/openclawchen8-lgtm/openclaw-tasks/tree/main/{project_name}"
+    project_link = f"[{project_name}]({project_url})"
+    row = f"| {emoji} | {project_link} | {p_total} | {p_done} | {p_pending} | {p_inprogress} | {p_skip} | {bar} | {updated_display} |"
+    project_rows.append((row, pending_high))
+
+total_active = total_tasks - total_skip
+overall_pct = total_done * 100 // total_active if total_active > 0 else 0
+
+high_section = ""
+if all_high_pending:
+    rows = "\n".join(f"| {p} | {t} | {n} |" for p, t, n in all_high_pending)
+    high_section = f"\n\n## 🔥 待處理高優先級任務\n\n| 專案 | 任務 | 標題 |\n|------|------|------|\n{rows}\n\n---\n"
+
+def task_section(title, emoji, items):
+    if not items:
+        return ""
+    rows = "\n".join(f"| {p} | {t} | {s} | {emoji} |" for p, t, s in items)
+    return f"\n## {emoji} {title}\n\n| 專案 | 任務 | 標題 | 狀態 |\n|------|------|------|------|\n{rows}\n"
+
+detail_section = (
+    task_section("待處理", "⬜", all_pending) +
+    task_section("進行中", "🔄", all_inprogress) +
+    task_section("跳過", "⏭️", all_skip)
+)
+
+md = f"""# 📁 Projects Dashboard
+
+> 最後更新: {NOW} · 自動生成
+
+---
+
+## 📊 總覽
+
+| 指標 | 數量 |
+|------|------|
+| 專案數 | {total_projects} |
+| 任務總數 | {total_tasks} |
+| ✅ 已完成 | {total_done} |
+| ⬜ 待處理 | {total_pending} |
+| 🔄 進行中 | {total_inprogress} |
+| ⏭️ 跳過 | {total_skip} |
+| 總完成率 | {overall_pct}% |{high_section}
+{detail_section}
+{stats_output}
+## 📋 專案列表
+
+| 狀態 | 專案 | 總數 | ✅ | ⬜ | 🔄 | ⏭️ | 進度 | 更新 |
+|------|------|------|----|----|----|----|------|------|
+"""
+for row, pending_high in project_rows:
+    md += row + "\n"
+    for h in pending_high:
+        md += f"  {h}\n"
+
+md += f"""
+---
+
+## 🔗 快速連結
+
+- [任務看板](https://github.com/users/openclawchen8-lgtm/projects/1/views/1?groupedBy%5BcolumnId%5D=Status)
+- [每日儀表板 → DAILY.md](https://github.com/openclawchen8-lgtm/openclaw-tasks/blob/main/DAILY.md)
+- [Tasks 根目錄](https://github.com/openclawchen8-lgtm/openclaw-tasks/tree/main)
+- 腳本: `scripts/update_projects.py` · `scripts/update_daily.py`
+
+---
+_自動生成，請勿手動編輯_
+"""
+
+OUTPUT_FILE.write_text(md.format(stats_output=stats_output), encoding="utf-8")
+print(f"✅ PROJECTS.md 更新完成: {NOW} ({total_projects} 專案 · {total_tasks} 任務 · {overall_pct}% 完成)")
