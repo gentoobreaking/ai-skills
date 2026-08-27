@@ -80,7 +80,7 @@ def parse_frontmatter(content):
         for line in fm_match.group(1).splitlines():
             lm = re.match(r"^\s*status\s*:\s*(.+)", line, re.I)
             if lm:
-                raw = lm.group(1).strip().lower().split("#")[0].strip().replace("_", "-")
+                raw = lm.group(1).strip().lower().split("#")[0].strip().replace("_", "-").replace("_", "-")
                 status = normalize_status(raw)
             tm = re.match(r'^\s*title\s*:\s*(.+)', line, re.I)
             if tm:
@@ -240,7 +240,7 @@ def build_readme_standard(project_name, tasks):
         assignee = t.get("assignee", "未指派")
         title = t.get("title", f"任務 {t['num']}")
         stem = t.get("stem", t["num"])
-        task_link = make_task_link(project_name, stem)
+        task_link = make_task_link(proj_name, stem)
         rows.append(f"| {task_link} | {title} | {assignee} | 中 | {status_text} |")
     rows_text = "\n".join(rows) if rows else "| | | | | |"
     return f"""# {project_name}
@@ -364,6 +364,18 @@ def generate_standard_readme(project_dir, tasks):
     
     # ----- Task 列表 -----
     task_list_rows = []
+    for t in sorted_tasks:
+        emoji = get_emoji(t["status"])
+        status_text = emoji
+        if t["status"] == "done": status_text = "✅ done"
+        elif t["status"] == "skip": status_text = "⏭️ skip"
+        elif t["status"] == "in-progress": status_text = "🔧 in-progress"
+        else: status_text = "📋 pending"
+        
+        name = t.get("title", "")
+        name = re.sub(r'^\[T\d+[-+]?\d*\]\s*', '', name)
+        
+        # 點擊連結
     for t in sorted_tasks:
         emoji = get_emoji(t["status"])
         status_text = emoji

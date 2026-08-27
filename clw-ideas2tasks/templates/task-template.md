@@ -4,6 +4,7 @@ title: {title}
 type: pending
 priority: {priority}
 status: pending
+depends_on: []
 assignee: {assignee}
 created: {created}
 updated: {updated}

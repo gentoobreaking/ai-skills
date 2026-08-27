@@ -95,4 +95,4 @@ openclaw skills install <skill-name>
 
 ---
 
-*最後更新：2026-06-16*
+*最後更新：2026-08-28*
