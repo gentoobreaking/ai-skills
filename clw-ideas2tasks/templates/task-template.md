@@ -1,7 +1,7 @@
 ---
 github_issue: {github}
 title: {title}
-type: pending
+type: {type}
 priority: {priority}
 status: pending
 depends_on: []

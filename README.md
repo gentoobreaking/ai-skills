@@ -38,6 +38,7 @@ ai-skills/
 ├── scrum-task-tracker            # 📋 原創：Scrum 專案管理與任務追蹤標準流程。確保所有專案遵循統一的任務拆分、執行、驗
 ├── self-improving                # 第三方：Self-reflection + Self-criticism + Self-
 ├── self-improving-agent          # 第三方：Captures learnings, errors, and correcti
+├── tasks-finish-notify           # 第三方：
 ├── workflow-automator            # 第三方：重复操作一键自动化。重复操作太浪费时间？用自然语言构建自动化工作流 This s
 ```
 
@@ -77,6 +78,7 @@ ai-skills/
 | `persona-switch` | Persona Switch | 切换 agent 的人设（soul.md）。支持三套预设人设与原有人设之间自由切换。 触发词：切换人设、persona-switch、赛博朋友、温柔伴侣、创始人 |
 | `Self-Improving + Proactive Agent` | Self Improving + Proactive Agent | Self-reflection + Self-criticism + Self-learning + Self-organizing memory. Agent |
 | `self-improvement` | Self Improvement | Captures learnings, errors, and corrections to enable continuous improvement. Us |
+| `tasks-finish-notify` | Tasks Finish Notify |  |
 | `workflow-automator` | Workflow Automator | 重复操作一键自动化。重复操作太浪费时间？用自然语言构建自动化工作流 This skill should be used when the user asks a |
 
 ---
@@ -95,4 +97,4 @@ openclaw skills install <skill-name>
 
 ---
 
-*最後更新：2026-08-28*
+*最後更新：2026-11-22*
