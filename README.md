@@ -16,6 +16,7 @@
 ```
 ai-skills/
 ├── agent-browser-clawdbot-local  # 第三方：Headless browser automation CLI optimize
+├── android-rea-setup             # 第三方：在 macOS 上全自動建置輕量化 Root Android 模擬器、部署 Fr
 ├── clw-cnyes-stock               # 📰 原創：鉅亨網台股新聞自動抓取，支援增量比對與 Telegram 通知。
 ├── clw-github                    # 原創：Interact with GitHub using the `gh` CLI.
 ├── clw-gold-monitor              # 🥇 原創：台灣銀行黃金存摺價格監控系統。支援買/賣雙價格、價格變動通知、特定價格點位監控與
@@ -35,6 +36,7 @@ ai-skills/
 ├── openclaw-backup               # 第三方：Backup and restore OpenClaw data. Use wh
 ├── persona-switch                # 第三方：切换 agent 的人设（soul.md）。支持三套预设人设与原有人设之间自由切
 ├── prompt-injection-filter       # 🔒 原創：純 Python 正則 Prompt 注入過濾器，檢測 ignore previ
+├── rea-apk-pcap-analysis         # 第三方：使用 REA MCP 工具對 Android APK 與已側錄的 PCAP/HA
 ├── run-project                   # 第三方：執行指定專案的所有未完成任務。當使用者說「執行 <專案名> 專案」、「繼續 <專
 ├── scrum-task-tracker            # 📋 原創：Scrum 專案管理與任務追蹤標準流程。確保所有專案遵循統一的任務拆分、執行、驗
 ├── self-improving                # 第三方：Self-reflection + Self-criticism + Self-
@@ -42,6 +44,7 @@ ai-skills/
 ├── spec-to-tasks                 # 第三方：專案規格書（spec.md + algs/*.md）拆解為 T001–T0xx 
 ├── task-audit                    # 第三方：任務書完成度稽核——對 status:done 的任務書逐條驗證「驗收標準是否真
 ├── tasks-finish-notify           # 第三方：
+├── telegram-reverse-notify       # 第三方：從 Telegram 輪詢訊息並寫入本地 inbox，供 OpenCode Ag
 ├── workflow-automator            # 第三方：重复操作一键自动化。重复操作太浪费时间？用自然语言构建自动化工作流 This s
 ├── write-readme                  # 第三方：為 Git repository 產生產品級 README.md。透過「讀規格書
 ├── youtube-transcript            # 第三方：Fetch transcripts from YouTube videos fo
@@ -77,16 +80,19 @@ ai-skills/
 | Skill | 名稱 | 說明 |
 |-------|------|------|
 | `agent-browser` | Agent Browser | Headless browser automation CLI optimized for AI agents with accessibility tree  |
+| `android-rea-setup` | Android Rea Setup | 在 macOS 上全自動建置輕量化 Root Android 模擬器、部署 Frida Server 並準備 REA MCP 封包側錄與 APK 逆向分析環境。 |
 | `fbs_bookwriter` | Fbs_Bookwriter | FBS 福帮手长文档写作：书/手册/白皮书/长篇报道全流程；Node 脚本驱动 intake、会话恢复、S/P/C/B 质检与 MD/HTML 交付。用户提及写 |
 | `github` | Github | 在用户提及 GitHub 仓库、Issue、Pull Request、Actions、代码管理相关内容与操作时使用此技能。触发关键词包括：创建 issue、新建 |
 | `openclaw-backup` | Openclaw Backup | Backup and restore OpenClaw data. Use when user asks to create backups, set up a |
 | `persona-switch` | Persona Switch | 切换 agent 的人设（soul.md）。支持三套预设人设与原有人设之间自由切换。 触发词：切换人设、persona-switch、赛博朋友、温柔伴侣、创始人 |
+| `rea-apk-pcap-analysis` | Rea Apk Pcap Analysis | 使用 REA MCP 工具對 Android APK 與已側錄的 PCAP/HAR 封包檔進行聯合逆向與 API 參數追蹤分析。當使用者要求分析 traffic |
 | `run-project` | Run Project | 執行指定專案的所有未完成任務。當使用者說「執行 <專案名> 專案」、「繼續 <專案名> 的任務」或要求持續完成任務書時使用。掃描 ~/tasks/<專案名>/t |
 | `Self-Improving + Proactive Agent` | Self Improving + Proactive Agent | Self-reflection + Self-criticism + Self-learning + Self-organizing memory. Agent |
 | `self-improvement` | Self Improvement | Captures learnings, errors, and corrections to enable continuous improvement. Us |
 | `spec-to-tasks` | Spec To Tasks | 專案規格書（spec.md + algs/*.md）拆解為 T001–T0xx 任務書。適用於使用者要求「拆任務」「根據規格書建立任務」「寫任務書」時。產出符合 |
 | `task-audit` | Task Audit | 任務書完成度稽核——對 status:done 的任務書逐條驗證「驗收標準是否真的達成」，誠實打勾、揭露未竟項、必要時降級狀態。適用於使用者要求「稽核任務書」「 |
 | `tasks-finish-notify` | Tasks Finish Notify |  |
+| `telegram-reverse-notify` | Telegram Reverse Notify | 從 Telegram 輪詢訊息並寫入本地 inbox，供 OpenCode Agent 讀取與處理，實現從 Telegram 反向通知 Agent，並透過 ta |
 | `workflow-automator` | Workflow Automator | 重复操作一键自动化。重复操作太浪费时间？用自然语言构建自动化工作流 This skill should be used when the user asks a |
 | `write-readme` | Write Readme | 為 Git repository 產生產品級 README.md。透過「讀規格書＋讀原始碼→規格與實作比對→分階段輸出」的流程，確保 README 內容全部有證 |
 | `youtube-transcript` | Youtube Transcript | Fetch transcripts from YouTube videos for summarization and analysis. |
@@ -107,4 +113,4 @@ openclaw skills install <skill-name>
 
 ---
 
-*最後更新：2026-11-22*
+*最後更新：2026-11-24*
